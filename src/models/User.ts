@@ -8,7 +8,7 @@ export type UserModel = mongoose.Document & {
     passwordResetToken: string,
     passwordResetExpires: Date,
 
-    facebook: string,
+    google: string,
     tokens: AuthToken[],
 
     profile: {
@@ -17,7 +17,6 @@ export type UserModel = mongoose.Document & {
     },
 
     comparePassword: comparePasswordFunction,
-    gravatar: (size: number) => string
 };
 
 type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void;
