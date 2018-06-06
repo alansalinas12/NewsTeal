@@ -1,5 +1,9 @@
+import errorHandler from "errorhandler";
+
 import app from "./src/app";
 
+
+app.use(errorHandler());
 /**
  * Start Express server.
  */

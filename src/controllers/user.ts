@@ -31,12 +31,12 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
     req.assert("password", "Password cannot be blank").notEmpty();
     req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash("errors", errors);
-        return res.redirect("/login");
-    }
+    req.getValidationResult()
+        .then(function (result) { })
+        .catch(function (errors) {
+            req.flash("errors", errors);
+            return res.redirect("/login");
+        });
 
     passport.authenticate("local", (err: Error, user: UserModel, info: IVerifyOptions) => {
         if (err) { return next(err); }
@@ -46,7 +46,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
         }
         req.logIn(user, (err) => {
             if (err) { return next(err); }
-            req.flash("success", { msg: "Success! You are logged in." });
+            req.flash("success", "Success! You are logged in.");
             res.redirect(req.session.returnTo || "/");
         });
     })(req, res, next);
@@ -84,12 +84,12 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
     req.assert("confirmPassword", "Passwords do not match").equals(req.body.password);
     req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash("errors", errors);
-        return res.redirect("/signup");
-    }
+    req.getValidationResult()
+        .then(function (result) { })
+        .catch(function (errors) {
+            req.flash("errors", errors);
+            return res.redirect("/signup");
+        });
 
     const user = new User({
         email: req.body.email,
@@ -99,7 +99,7 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
     User.findOne({ email: req.body.email }, (err, existingUser) => {
         if (err) { return next(err); }
         if (existingUser) {
-            req.flash("errors", { msg: "Account with that email address already exists." });
+            req.flash("errors", "Account with that email address already exists.");
             return res.redirect("/signup");
         }
         user.save((err) => {
@@ -132,12 +132,12 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
     req.assert("email", "Please enter a valid email address.").isEmail();
     req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash("errors", errors);
-        return res.redirect("/account");
-    }
+    req.getValidationResult()
+        .then(function (result) { })
+        .catch(function (errors) {
+            req.flash("errors", errors);
+            return res.redirect("/account");
+        });
 
     User.findById(req.user.id, (err, user: UserModel) => {
         if (err) { return next(err); }
@@ -147,12 +147,12 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
         user.save((err: WriteError) => {
             if (err) {
                 if (err.code === 11000) {
-                    req.flash("errors", { msg: "The email address you have entered is already associated with an account." });
+                    req.flash("errors", "The email address you have entered is already associated with an account.");
                     return res.redirect("/account");
                 }
                 return next(err);
             }
-            req.flash("success", { msg: "Profile information has been updated." });
+            req.flash("success", "Profile information has been updated.");
             res.redirect("/account");
         });
     });
@@ -166,19 +166,19 @@ export let postUpdatePassword = (req: Request, res: Response, next: NextFunction
     req.assert("password", "Password must be at least 4 characters long").len({ min: 4 });
     req.assert("confirmPassword", "Passwords do not match").equals(req.body.password);
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash("errors", errors);
-        return res.redirect("/account");
-    }
+    req.getValidationResult()
+        .then(function (result) { })
+        .catch(function (errors) {
+            req.flash("errors", errors);
+            return res.redirect("/account");
+        });
 
     User.findById(req.user.id, (err, user: UserModel) => {
         if (err) { return next(err); }
         user.password = req.body.password;
         user.save((err: WriteError) => {
             if (err) { return next(err); }
-            req.flash("success", { msg: "Password has been changed." });
+            req.flash("success", "Password has been changed.");
             res.redirect("/account");
         });
     });
@@ -192,7 +192,7 @@ export let postDeleteAccount = (req: Request, res: Response, next: NextFunction)
     User.remove({ _id: req.user.id }, (err) => {
         if (err) { return next(err); }
         req.logout();
-        req.flash("info", { msg: "Your account has been deleted." });
+        req.flash("info", "Your account has been deleted.");
         res.redirect("/");
     });
 };
@@ -209,7 +209,7 @@ export let getOauthUnlink = (req: Request, res: Response, next: NextFunction) =>
         user.tokens = user.tokens.filter((token: AuthToken) => token.kind !== provider);
         user.save((err: WriteError) => {
             if (err) { return next(err); }
-            req.flash("info", { msg: `${provider} account has been unlinked.` });
+            req.flash("info", `${provider} account has been unlinked.`);
             res.redirect("/account");
         });
     });
