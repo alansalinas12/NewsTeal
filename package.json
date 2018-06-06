@@ -4,6 +4,7 @@
     "url": "https://github.com/alansalinas12/NewsTeal/issues"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
@@ -26,9 +27,11 @@
   "description": "Mongoose and Cheerio",
   "devDependencies": {
     "@types/async": "^2.0.45",
+    "@types/axios": "^0.14.0",
     "@types/bcrypt-nodejs": "^0.0.30",
     "@types/bluebird": "^3.5.20",
     "@types/body-parser": "^1.16.8",
+    "@types/cheerio": "^0.22.7",
     "@types/connect-mongo": "^0.0.35",
     "@types/dotenv": "^4.0.2",
     "@types/errorhandler": "^0.0.32",
