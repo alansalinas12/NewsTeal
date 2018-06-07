@@ -14,6 +14,10 @@ const MongoStore = mongo(session);
 
 dotenv.config({ path: "../.env" });
 
+import * as homeController from "./controllers/home";
+import * as userController from "./controllers/user";
+import * as scrapeController from "./controllers/scrape";
+
 import * as passportConfig from "./config/passport";
 
 const app = express();
@@ -70,5 +74,33 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, "public")));
+
+/**
+ * Primary app routes.
+ */
+app.get("/", homeController.index);
+app.get("/login", userController.getLogin);
+app.post("/login", userController.postLogin);
+app.get("/logout", userController.logout);
+app.get("/signup", userController.getSignup);
+app.post("/signup", userController.postSignup);
+app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
+app.post("/account/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);
+app.post("/account/password", passportConfig.isAuthenticated, userController.postUpdatePassword);
+app.post("/account/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
+app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.get("/scrape", passportConfig.isAuthenticated, scrapeController.getScrape);
+app.get("/articles", passportConfig.isAuthenticated, scrapeController.getArticles);
+app.get("/articles/:id", passportConfig.isAuthenticated, scrapeController.getArticle);
+app.post("/articles", passportConfig.isAuthenticated, scrapeController.postArticle);
+
+/**
+ * OAuth authentication routes. (Sign in)
+ */
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
+app.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
+    res.redirect(req.session.returnTo || "/");
+});
+
 
 export default app;
