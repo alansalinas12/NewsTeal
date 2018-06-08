@@ -23,6 +23,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const passport_1 = __importDefault(require("passport"));
 const express_validator_1 = __importDefault(require("express-validator"));
 const bluebird_1 = __importDefault(require("bluebird"));
+const express_handlebars_1 = __importDefault(require("express-handlebars"));
 const secrets_1 = require("./util/secrets");
 const MongoStore = connect_mongo_1.default(express_session_1.default);
 // Load environment variables from .env file, where API keys and passwords are configured
@@ -43,9 +44,13 @@ mongoose_1.default.connect(mongoUrl, { useMongoClient: true }).then(() => { }).c
     // process.exit();
 });
 // Express configuration
-app.set("port", process.env.PORT || 3000);
-app.set("views", path_1.default.join(__dirname, "../views"));
+app.set("port", process.env.PORT || 8080);
+// setup rendering engine
+app.engine("handlebars", express_handlebars_1.default({
+    defaultLayout: "main"
+}));
 app.set("view engine", "handlebars");
+app.set("views", path_1.default.join(__dirname, "views"));
 app.use(compression_1.default());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
@@ -106,7 +111,7 @@ app.post("/articles", passportConfig.isAuthenticated, scrapeController.postArtic
  * OAuth authentication routes. (Sign in)
  */
 app.get("/auth/google", passport_1.default.authenticate("google", { scope: ["profile"] }));
-app.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
+app.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/" }), (req, res) => {
     res.redirect(req.session.returnTo || "/");
 });
 exports.default = app;

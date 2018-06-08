@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Home page.
  */
 exports.index = (req, res) => {
-    res.render("home", {
+    res.render("index", {
         title: "Home"
     });
 };

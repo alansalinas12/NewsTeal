@@ -38,8 +38,8 @@ passport_1.default.use(new LocalStrategy({ usernameField: "email" }, (email, pas
     });
 }));
 passport_1.default.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_ID,
-    clientSecret: process.env.GOOGLE_SECRET,
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
     callbackURL: "/auth/google/callback",
     passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {

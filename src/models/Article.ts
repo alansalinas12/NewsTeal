@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 export type ArticleModel = mongoose.Document & {
     title: {
@@ -34,7 +34,7 @@ const articleSchema = new mongoose.Schema({
     // The ref property links the ObjectId to the Note model
     // This allows us to populate the Article with an associated Note
     note: {
-        type: schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Note"
     }
 });

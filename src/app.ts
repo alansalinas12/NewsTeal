@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 import passport from "passport";
 import expressValidator from "express-validator";
 import bluebird from "bluebird";
-import handlebars from "express-handlebars";
+import exphbs from "express-handlebars";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
 
 const MongoStore = mongo(session);
@@ -43,9 +43,13 @@ mongoose.connect(mongoUrl, {useMongoClient: true}).then(
 });
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
-app.set("views", path.join(__dirname, "../views"));
+app.set("port", process.env.PORT || 8080);
+// setup rendering engine
+app.engine("handlebars", exphbs({
+    defaultLayout: "main"
+}));
 app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views"));
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -110,7 +114,7 @@ app.post("/articles", passportConfig.isAuthenticated, scrapeController.postArtic
  * OAuth authentication routes. (Sign in)
  */
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
-app.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
+app.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/" }), (req, res) => {
     res.redirect(req.session.returnTo || "/");
 });
 

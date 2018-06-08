@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const bson_1 = require("bson");
+const ObjectId = mongoose_1.default.Schema.Types.ObjectId;
 const articleSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
@@ -19,7 +19,7 @@ const articleSchema = new mongoose_1.default.Schema({
     // The ref property links the ObjectId to the Note model
     // This allows us to populate the Article with an associated Note
     note: {
-        type: bson_1.ObjectId,
+        type: ObjectId,
         ref: "Note"
     }
 });

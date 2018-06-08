@@ -37,8 +37,8 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
 }));
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_ID,
-    clientSecret: process.env.GOOGLE_SECRET,
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
     callbackURL: "/auth/google/callback",
     passReqToCallback: true
 }, (req: any, accessToken, refreshToken, profile, done) => {
