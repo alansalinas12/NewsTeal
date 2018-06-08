@@ -43,52 +43,52 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 }, (req: any, accessToken, refreshToken, profile, done) => {
 
-        if (req.user) {
-            User.findOne({ google: profile.id }, (err, existingUser) => {
+    if (req.user) {
+        User.findOne({ google: profile.id }, (err, existingUser) => {
+            if (err) { return done(err); }
+            if (existingUser) {
+                req.flash("errors", { msg: "There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account." });
+                done(err);
+            } else {
+                User.findById(req.user.id, (err, user: any) => {
+                    if (err) { return done(err); }
+                    user.google = profile.id;
+                    user.tokens.push({ kind: "google", accessToken });
+                    user.profile.name = user.profile.name || `${profile.name.givenName} ${profile.name.familyName}`;
+
+                    user.save((err: Error) => {
+                        req.flash("info", { msg: "Google account has been linked." });
+                        done(err, user);
+                    });
+                });
+            }
+        });
+    } else {
+        User.findOne({ google: profile.id }, (err, existingUser) => {
+            if (err) { return done(err); }
+            if (existingUser) {
+                return done(undefined, existingUser);
+            }
+            User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
                 if (err) { return done(err); }
-                if (existingUser) {
-                    req.flash("errors", { msg: "There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account." });
+                if (existingEmailUser) {
+                    req.flash("errors", { msg: "There is already an account using this email address." });
                     done(err);
                 } else {
-                    User.findById(req.user.id, (err, user: any) => {
-                        if (err) { return done(err); }
-                        user.google = profile.id;
-                        user.tokens.push({ kind: "google", accessToken });
-                        user.profile.name = user.profile.name || `${profile.name.givenName} ${profile.name.familyName}`;
+                    const user: any = new User();
+                    user.email = profile._json.email;
+                    user.google = profile.id;
+                    user.tokens.push({ kind: "google", accessToken });
+                    user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
 
-                        user.save((err: Error) => {
-                            req.flash("info", { msg: "Google account has been linked." });
-                            done(err, user);
-                        });
+                    user.save((err: Error) => {
+                        done(err, user);
                     });
                 }
             });
-        } else {
-            User.findOne({ google: profile.id }, (err, existingUser) => {
-                if (err) { return done(err); }
-                if (existingUser) {
-                    return done(undefined, existingUser);
-                }
-                User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
-                    if (err) { return done(err); }
-                    if (existingEmailUser) {
-                        req.flash("errors", { msg: "There is already an account using this email address." });
-                        done(err);
-                    } else {
-                        const user: any = new User();
-                        user.email = profile._json.email;
-                        user.google = profile.id;
-                        user.tokens.push({ kind: "facebook", accessToken });
-                        user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-
-                        user.save((err: Error) => {
-                            done(err, user);
-                        });
-                    }
-                });
-            });
-        }
-    }));
+        });
+    }
+}));
 
 
 /**

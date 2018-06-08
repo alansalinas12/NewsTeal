@@ -1,7 +1,9 @@
+
 /// <reference types="express" />
+
 // Add RequestValidation Interface on to Express's Request Interface.
 declare namespace Express {
-    interface Request extends Flash { }
+    interface Request extends Flash {}
 }
 
 interface Flash {
@@ -9,3 +11,4 @@ interface Flash {
 }
 
 declare module "express-flash";
+
