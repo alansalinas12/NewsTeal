@@ -13,7 +13,7 @@ export type ArticleModel = mongoose.Document & {
     },
 
     note: {
-        type: ObjectId,
+        type: string,
         ref: string
     }
 };
