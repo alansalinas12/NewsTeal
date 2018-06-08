@@ -1,16 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\dist\\controllers",
-    "\\dist\\public",
-    "\\dist\\public\\js",
-    "\\dist\\views",
-    "\\dist\\views\\layouts",
     "\\src",
     "\\src\\config",
     "\\views",
     "\\views\\layouts"
   ],
-  "SelectedNode": "\\src\\public\\js\\main.ts",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }

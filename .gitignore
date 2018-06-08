@@ -37,3 +37,5 @@ Thumbs.db
 
 # Ignore output from coverage report
 coverage
+
+.env
