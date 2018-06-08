@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\public",
+    "\\src\\public\\css",
+    "\\src\\public\\fonts",
+    "\\src\\public\\images",
+    "\\src\\public\\js",
+    "\\src\\types",
+    "\\src\\util"
+  ],
+  "SelectedNode": "\\jest.config.js",
+  "PreviewInSolutionExplorer": false
+}
