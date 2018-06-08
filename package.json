@@ -79,6 +79,9 @@
   "homepage": "https://github.com/alansalinas12/NewsTeal#readme",
   "license": "ISC",
   "name": "newsteal",
+  "engines": {
+    "node": "9.8.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alansalinas12/NewsTeal.git"
