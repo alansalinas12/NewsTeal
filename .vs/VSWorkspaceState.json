@@ -1,15 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\dist\\controllers",
+    "\\dist\\public",
+    "\\dist\\public\\js",
+    "\\dist\\views",
+    "\\dist\\views\\layouts",
     "\\src",
-    "\\src\\public",
-    "\\src\\public\\css",
-    "\\src\\public\\fonts",
-    "\\src\\public\\images",
-    "\\src\\public\\js",
-    "\\src\\types",
-    "\\src\\util"
+    "\\src\\config",
+    "\\views",
+    "\\views\\layouts"
   ],
-  "SelectedNode": "\\jest.config.js",
+  "SelectedNode": "\\src\\public\\js\\main.ts",
   "PreviewInSolutionExplorer": false
 }
